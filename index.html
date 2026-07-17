@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Web Security Header Scanner</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --warn: #d29922;
+      --danger: #f85149;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace; line-height: 1.6; }
+    header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1.5rem 2rem; display: flex; align-items: center; gap: 1rem; }
+    header .shield { font-size: 2.5rem; }
+    header h1 { font-size: 1.8rem; color: var(--accent); font-weight: 700; }
+    header p { color: var(--muted); font-size: 0.95rem; }
+    .hero { text-align: center; padding: 4rem 2rem 3rem; }
+    .hero h2 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { color: var(--muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto 2rem; }
+    .badges { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+    .badge { padding: 0.35rem 0.9rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; }
+    .badge-blue { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.3); }
+    .badge-green { background: rgba(63,185,80,0.15); color: var(--accent2); border: 1px solid rgba(63,185,80,0.3); }
+    .badge-yellow { background: rgba(210,153,34,0.15); color: var(--warn); border: 1px solid rgba(210,153,34,0.3); }
+    .cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 0.75rem 1.75rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary { background: var(--accent); color: #0d1117; }
+    .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    main { max-width: 960px; margin: 0 auto; padding: 2rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin: 2rem 0; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    .card .icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .card h3 { color: var(--accent); font-size: 1rem; margin-bottom: 0.5rem; }
+    .card p { color: var(--muted); font-size: 0.9rem; }
+    .section-title { font-size: 1.4rem; font-weight: 700; margin: 2.5rem 0 1rem; color: var(--text); border-left: 3px solid var(--accent); padding-left: 0.75rem; }
+    pre { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; overflow-x: auto; font-size: 0.88rem; margin-bottom: 1rem; }
+    code { color: var(--accent2); }
+    .grade-table { width: 100%; border-collapse: collapse; }
+    .grade-table th, .grade-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
+    .grade-table th { color: var(--muted); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .grade-a { color: var(--accent2); font-weight: 700; }
+    .grade-b { color: #a5d6a7; font-weight: 700; }
+    .grade-c { color: var(--warn); font-weight: 700; }
+    .grade-d { color: #ff8a65; font-weight: 700; }
+    .grade-f { color: var(--danger); font-weight: 700; }
+    .headers-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem; }
+    .header-item { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 0.5rem 0.75rem; font-size: 0.85rem; font-family: monospace; color: var(--accent); }
+    footer { text-align: center; padding: 2.5rem; color: var(--muted); font-size: 0.85rem; border-top: 1px solid var(--border); margin-top: 3rem; }
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="shield">&#x1F6E1;&#xFE0F;</span>
+  <div>
+    <h1>Web Security Header Scanner</h1>
+    <p>A defensive Python CLI tool for security recon</p>
+  </div>
+</header>
+
+<section class="hero">
+  <h2>Scan. Analyze. Harden.</h2>
+  <p>Inspect HTTP response headers for any URL and get an instant security grade with actionable fix recommendations.</p>
+  <div class="badges">
+    <span class="badge badge-blue">Python 3.8+</span>
+    <span class="badge badge-green">OWASP Aligned</span>
+    <span class="badge badge-yellow">Async &amp; Fast</span>
+    <span class="badge badge-blue">JSON Output</span>
+    <span class="badge badge-green">Zero Auth</span>
+  </div>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="https://github.com/grisheet/web-security-header-scanner">&#x2B07; View on GitHub</a>
+    <a class="btn btn-secondary" href="https://github.com/grisheet/web-security-header-scanner/blob/main/header_scanner.py">&#x1F4C4; View Source</a>
+  </div>
+</section>
+
+<main>
+
+  <div class="grid">
+    <div class="card">
+      <div class="icon">&#x26A1;</div>
+      <h3>Async &amp; Concurrent</h3>
+      <p>Built with <code>asyncio</code> and <code>httpx</code> for fast batch scanning with configurable concurrency.</p>
+    </div>
+    <div class="card">
+      <div class="icon">&#x1F4CA;</div>
+      <h3>Graded Reports</h3>
+      <p>Every scan returns a score out of 100 and a letter grade (A&#x2013;F) with per-header severity breakdowns.</p>
+    </div>
+    <div class="card">
+      <div class="icon">&#x1F527;</div>
+      <h3>Fix Recommendations</h3>
+      <p>Each missing or weak header comes with a concrete, copy-paste fix recommendation.</p>
+    </div>
+    <div class="card">
+      <div class="icon">&#x1F4BE;</div>
+      <h3>JSON &amp; Human Output</h3>
+      <p>Switch between human-readable terminal output and structured JSON for CI pipelines.</p>
+    </div>
+    <div class="card">
+      <div class="icon">&#x1F4C2;</div>
+      <h3>Batch Scanning</h3>
+      <p>Feed a <code>urls.txt</code> file and scan hundreds of sites in parallel with a single command.</p>
+    </div>
+    <div class="card">
+      <div class="icon">&#x1F512;</div>
+      <h3>Read-Only &amp; Safe</h3>
+      <p>Only standard GET requests are made. No payloads, no exploits &#x2014; purely defensive recon.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Quick Start</div>
+  <pre><code># 1. Install the only dependency
+pip install httpx
+
+# 2. Scan a single URL
+python header_scanner.py --url https://example.com
+
+# 3. Batch scan from file
+python header_scanner.py --input urls.txt
+
+# 4. JSON output (for CI / automation)
+python header_scanner.py --url https://example.com --format json
+
+# 5. Tune concurrency and timeout
+python header_scanner.py --input urls.txt --concurrency 20 --timeout 15
+
+# 6. Fail CI if any site scores below 80
+python header_scanner.py --input urls.txt --fail-under 80</code></pre>
+
+  <div class="section-title">Grading Scale</div>
+  <table class="grade-table">
+    <thead><tr><th>Grade</th><th>Score</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td class="grade-a">A</td><td>90 &#x2013; 100</td><td>Excellent security posture</td></tr>
+      <tr><td class="grade-b">B</td><td>80 &#x2013; 89</td><td>Good, minor improvements possible</td></tr>
+      <tr><td class="grade-c">C</td><td>70 &#x2013; 79</td><td>Moderate &#x2014; missing important headers</td></tr>
+      <tr><td class="grade-d">D</td><td>60 &#x2013; 69</td><td>Weak &#x2014; several high-severity gaps</td></tr>
+      <tr><td class="grade-f">F</td><td>&lt; 60</td><td>Failing &#x2014; critical headers absent</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-title">Headers Checked</div>
+  <div class="headers-list">
+    <div class="header-item">Strict-Transport-Security</div>
+    <div class="header-item">Content-Security-Policy</div>
+    <div class="header-item">X-Frame-Options</div>
+    <div class="header-item">X-Content-Type-Options</div>
+    <div class="header-item">Referrer-Policy</div>
+    <div class="header-item">Permissions-Policy</div>
+    <div class="header-item">X-XSS-Protection</div>
+  </div>
+
+</main>
+
+<footer>
+  Built with Python &bull; <a href="https://github.com/grisheet/web-security-header-scanner">GitHub Repository</a> &bull; OWASP / MDN aligned
+</footer>
+
+</body>
+</html>
