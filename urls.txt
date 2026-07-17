@@ -1,0 +1,4 @@
+# One URL per line. Blank lines and #-comments are ignored.
+# Scheme optional — bare hostnames default to https://
+https://github.com
+https://example.com
